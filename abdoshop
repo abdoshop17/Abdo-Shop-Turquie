@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AbdoShop</title>
+
+<style>
+body {
+    margin:0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #6a0dad, #9b59b6);
+}
+
+header {
+    background:#4b0082;
+    color:white;
+    padding:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+h1 {
+    margin:0;
+}
+
+#cart-btn {
+    background:white;
+    color:#6a0dad;
+    padding:10px 15px;
+    border-radius:5px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+main {
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap:20px;
+    padding:20px;
+}
+
+.product {
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 4px 8px rgba(0,0,0,0.2);
+}
+
+.product button {
+    margin-top:10px;
+    padding:8px;
+    background:#6a0dad;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+#cart-modal {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    justify-content:center;
+    align-items:center;
+}
+
+#cart-content {
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    width:90%;
+    max-width:400px;
+}
+
+#cart-content h2 {
+    margin-top:0;
+    color:#6a0dad;
+}
+
+form input {
+    width:100%;
+    padding:8px;
+    margin:5px 0;
+}
+
+form button {
+    width:100%;
+    padding:10px;
+    background:#6a0dad;
+    color:white;
+    border:none;
+    border-radius:5px;
+    margin-top:10px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>AbdoShop</h1>
+<div id="cart-btn">Panier 🛒</div>
+</header>
+
+<main id="products"></main>
+
+<div id="cart-modal">
+<div id="cart-content">
+<h2>Votre Panier</h2>
+<ul id="cart-items"></ul>
+
+<h3>Adresse de livraison</h3>
+<form id="checkout-form">
+<input type="text" placeholder="Nom complet" required>
+<input type="text" placeholder="Adresse" required>
+<input type="text" placeholder="Ville" required>
+<input type="text" placeholder="Téléphone" required>
+<button type="submit">Valider la commande</button>
+</form>
+
+<button onclick="closeCart()">Fermer</button>
+</div>
+</div>
+
+<script>
+const productsContainer = document.getElementById("products");
+const cartModal = document.getElementById("cart-modal");
+const cartItemsList = document.getElementById("cart-items");
+
+let cart = [];
+
+// Création de 12 produits exemple
+for(let i=1; i<=12; i++){
+    let price = 150 + (i * 20);
+    let product = document.createElement("div");
+    product.className = "product";
+    product.innerHTML = `
+        <h3>Habit ${i}</h3>
+        <p>${price} DH</p>
+        <button onclick="addToCart('Habit ${i}', ${price})">Ajouter au panier</button>
+    `;
+    productsContainer.appendChild(product);
+}
+
+function addToCart(name, price){
+    cart.push({name, price});
+    alert(name + " ajouté au panier");
+    renderCart();
+}
+
+function renderCart(){
+    cartItemsList.innerHTML="";
+    cart.forEach(item => {
+        let li = document.createElement("li");
+        li.textContent = item.name + " - " + item.price + " DH";
+        cartItemsList.appendChild(li);
+    });
+}
+
+document.getElementById("cart-btn").addEventListener("click", ()=>{
+    cartModal.style.display="flex";
+});
+
+function closeCart(){
+    cartModal.style.display="none";
+}
+
+document.getElementById("checkout-form").addEventListener("submit", function(e){
+    e.preventDefault();
+    alert("Commande envoyée !");
+    cart=[];
+    renderCart();
+    closeCart();
+});
+</script>
+
+</body>
+</html>
